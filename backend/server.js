@@ -10,6 +10,8 @@ import profileRoutes from "./routes/profileRoutes.js";
 import goalRoutes from "./routes/goalRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
+import matchRoutes from "./routes/matchRoutes.js";
+import leaderboardRoutes from "./routes/leaderboardRoutes.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -46,6 +48,8 @@ app.use("/api/profile", profileRoutes);
 app.use("/api/goals", goalRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/messages", messageRoutes);
+app.use("/api/matches", matchRoutes);
+app.use("/api/leaderboard", leaderboardRoutes);
 
 // Catch-all route for SPA
 app.get(/^\/(?!api).*/, (req, res) => {
@@ -75,7 +79,7 @@ const io = new Server(server, {
 const users = new Map();
 
 io.on("connection", (socket) => {
-  console.log("🔌 User connected:", socket.id);
+  // console.log("🔌 User connected:", socket.id);
 
   socket.on("addUser", (userId) => {
     if (userId) users.set(userId, socket.id);
@@ -102,7 +106,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("❌ User disconnected:", socket.id);
+    // console.log("❌ User disconnected:", socket.id);
     for (let [userId, sockId] of users.entries()) {
       if (sockId === socket.id) {
         users.delete(userId);
