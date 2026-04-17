@@ -5,20 +5,29 @@ import User from '../models/User.js';
 // Signup
 export const signup = async (req, res) => {
   try {
-    const { name, email, password, role, year } = req.body;
+    const { name, email, password, roles, year, adminSecret } = req.body;
 
     // Validate required fields
-    if (!name || !email || !password || !role || !year) {
+    if (!name || !email || !password || !roles || !roles.length || !year) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
     // Validate role based on year
     const yearNum = parseInt(year);
-    if (
-      (yearNum === 1 && role !== 'mentee') ||
-      (yearNum === 4 && role !== 'mentor')
-    ) {
-      return res.status(400).json({ message: 'Invalid role for selected year' });
+    if (yearNum === 1 && (roles.includes('mentor') || !roles.includes('mentee'))) {
+      return res.status(400).json({ message: '1st year students can only be mentees' });
+    }
+    if (yearNum === 4 && (roles.includes('mentee') || !roles.includes('mentor'))) {
+      return res.status(400).json({ message: '4th year students can only be mentors' });
+    }
+
+    let finalRoles = [...roles];
+    if (adminSecret) {
+       if (adminSecret === (process.env.ADMIN_SECRET || "ILOVEHACKATHONS")) {
+           if (!finalRoles.includes("admin")) finalRoles.push("admin");
+       } else {
+           return res.status(403).json({ message: "Invalid Admin Secret Key" });
+       }
     }
 
     // Check if user already exists
@@ -36,7 +45,7 @@ export const signup = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      role,
+      roles: finalRoles,
       year,
       hasProfile: false,
     });
@@ -85,6 +94,7 @@ export const login = async (req, res) => {
           id: user._id,
           name: user.name,
           email: user.email,
+          roles: user.roles,
           hasProfile: user.hasProfile,
         },
       });

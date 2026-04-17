@@ -28,6 +28,8 @@ import Goals from "./pages/Goals";
 import Messages from "./pages/Messages";
 import Resources from "./pages/Resources"
 import Events from "./pages/Events"
+import Leaderboard from "./pages/Leaderboard"
+import AdminDashboard from "./pages/AdminDashboard"
 
 function App() {
   const [user, setUser] = useState(null);
@@ -87,6 +89,14 @@ function App() {
           <Route path="/events" element={<ProtectedRoute user={user}>
                 <Events />
               </ProtectedRoute>}/>
+          <Route path="/leaderboard" element={<ProtectedRoute user={user}>
+                <Leaderboard />
+              </ProtectedRoute>}/>
+          <Route path="/admin" element={
+              <ProtectedRoute user={user}>
+                 <AdminDashboard />
+              </ProtectedRoute>
+          }/>
 
           <Route
             path="/create-profile"

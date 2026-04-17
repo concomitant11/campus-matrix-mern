@@ -20,6 +20,15 @@ const goalSchema = new mongoose.Schema(
     deadline: {
       type: Date,
     },
+    assigner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: false,
+    },
+    pointsAwarded: {
+      type: Boolean,
+      default: false,
+    }
   },
   { timestamps: true }
 );

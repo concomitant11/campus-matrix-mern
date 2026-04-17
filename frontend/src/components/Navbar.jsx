@@ -33,12 +33,12 @@ export default function Navbar({ user, setUser }) {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
-            {isLoggedIn && user?.role === "mentee" && (
+            {isLoggedIn && user?.roles?.includes("mentee") && (
               <Link to="/matching" className="text-gray-700 hover:text-blue-600">
                 Find Mentor
               </Link>
             )}
-            {isLoggedIn && user?.role === "mentor" && (
+            {isLoggedIn && user?.roles?.includes("mentor") && (
               <Link to="/matching" className="text-gray-700 hover:text-blue-600">
                 Find Mentee
               </Link>
@@ -46,12 +46,20 @@ export default function Navbar({ user, setUser }) {
             <Link to="/goals" className="text-gray-700 hover:text-blue-600">
               Goals
             </Link>
+            <Link to="/leaderboard" className="text-gray-700 hover:text-blue-600">
+              Leaderboard
+            </Link>
             <Link to="/resources" className="text-gray-700 hover:text-blue-600">
               Resources
             </Link>
             <Link to="/events" className="text-gray-700 hover:text-blue-600">
               Events
             </Link>
+            {isLoggedIn && user?.roles?.includes("admin") && (
+               <Link to="/admin" className="text-red-700 font-bold hover:text-red-600">
+                  Admin Panel
+               </Link>
+            )}
 
             {isLoggedIn && (
               <>
@@ -120,12 +128,12 @@ export default function Navbar({ user, setUser }) {
           </div>
 
           <div className="flex flex-col space-y-4">
-            {isLoggedIn && user?.role === "mentee" && (
+            {isLoggedIn && user?.roles?.includes("mentee") && (
               <Link to="/matching" onClick={() => setIsMobileMenuOpen(false)} className="text-lg text-gray-700 hover:text-blue-600">
                 Find Mentor
               </Link>
             )}
-            {isLoggedIn && user?.role === "mentor" && (
+            {isLoggedIn && user?.roles?.includes("mentor") && (
               <Link to="/matching" onClick={() => setIsMobileMenuOpen(false)} className="text-lg text-gray-700 hover:text-blue-600">
                 Find Mentee
               </Link>
@@ -133,12 +141,20 @@ export default function Navbar({ user, setUser }) {
             <Link to="/goals" onClick={() => setIsMobileMenuOpen(false)} className="text-lg text-gray-700 hover:text-blue-600">
               Goals
             </Link>
+            <Link to="/leaderboard" onClick={() => setIsMobileMenuOpen(false)} className="text-lg text-gray-700 hover:text-blue-600">
+              Leaderboard
+            </Link>
             <Link to="/resources" onClick={() => setIsMobileMenuOpen(false)} className="text-lg text-gray-700 hover:text-blue-600">
               Resources
             </Link>
             <Link to="/events" onClick={() => setIsMobileMenuOpen(false)} className="text-lg text-gray-700 hover:text-blue-600">
               Events
             </Link>
+            {isLoggedIn && user?.roles?.includes("admin") && (
+               <Link to="/admin" onClick={() => setIsMobileMenuOpen(false)} className="text-lg text-red-700 font-bold hover:text-red-600">
+                  Admin Panel
+               </Link>
+            )}
             {isLoggedIn && (
               <Link to="/messages" onClick={() => setIsMobileMenuOpen(false)} className="text-lg text-gray-700 hover:text-blue-600">
                 Messages

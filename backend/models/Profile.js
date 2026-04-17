@@ -35,6 +35,14 @@ const profileSchema = new mongoose.Schema(
     linkedin: {
       type: String,
     },
+    gamificationPoints: {
+      type: Number,
+      default: 0,
+    },
+    badges: {
+      type: [String],
+      default: [],
+    }
   },
   { timestamps: true }
 );

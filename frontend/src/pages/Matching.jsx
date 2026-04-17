@@ -1,35 +1,25 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import axios from "axios";
 import 'react-toastify/dist/ReactToastify.css';
-
-const dummyMentors = [
-  { id: 1, name: "Anjali Sharma", year: "3rd Year", expertise: "Web Development", image: "/avatars/mentor1.png" },
-  { id: 2, name: "Rahul Verma", year: "4th Year", expertise: "Machine Learning", image: "/avatars/mentor2.png" },
-  { id: 3, name: "Neha Gupta", year: "Final Year", expertise: "UI/UX Design", image: "/avatars/mentor3.png" },
-];
-
-const dummyMentees = [
-  { id: 1, name: "Amit Singh", branch: "CSE", interests: "Backend Dev", image: "/avatars/mentee1.png" },
-  { id: 2, name: "Pooja Patel", branch: "ECE", interests: "Competitive Programming", image: "/avatars/mentee2.png" },
-  { id: 3, name: "Karan Mehta", branch: "IT", interests: "AI/ML", image: "/avatars/mentee3.png" },
-];
 
 const Matching = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [matches, setMatches] = useState([]);
+  const [activeTab, setActiveTab] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const getUser = async () => {
       try {
-        const res = await fetch("/api/auth/me", {
-          credentials: "include",
-        });
-        if (res.ok) {
-          const data = await res.json();
-          setUser(data);
-          setTimeout(() => setLoading(false), 3000); // simulate matching
+        const res = await axios.get("/api/auth/me", { withCredentials: true });
+        if (res.status === 200) {
+          setUser(res.data);
+          let defaultTab = res.data.roles.includes("mentee") ? "mentor" : "mentee";
+          setActiveTab(defaultTab);
+          fetchMatches(defaultTab);
         } else {
           navigate("/");
         }
@@ -38,78 +28,123 @@ const Matching = () => {
         navigate("/");
       }
     };
-
     getUser();
   }, [navigate]);
 
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh]">
-        <img src="/spinner.gif" alt="Loading..." className="w-72 h-72 mb-4" />
-        <p className="text-xl font-medium text-gray-600">Matching...</p>
-      </div>
-    );
-  }
+  const fetchMatches = async (targetRole) => {
+    setLoading(true);
+    try {
+      const res = await axios.get(`/api/matches/potential?targetRole=${targetRole}`, {
+        withCredentials: true,
+      });
+      setMatches(res.data);
+    } catch (err) {
+      if (err.response?.status === 400) {
+         toast.error("Please create a profile first to see matches!");
+      } else {
+         toast.error("Failed to load matches");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleTabSwitch = (targetRole) => {
+    setActiveTab(targetRole);
+    fetchMatches(targetRole);
+  };
+
+  const requestConnection = async (targetUserId) => {
+    try {
+      await axios.post("/api/matches/request", {
+        targetUserId,
+        targetRole: activeTab
+      }, { withCredentials: true });
+      toast.success("Request sent successfully!");
+      setMatches(prev => prev.filter(m => m.profile.user._id !== targetUserId));
+    } catch(err) {
+      toast.error(err.response?.data?.message || "Failed to send request");
+    }
+  };
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
+      <ToastContainer />
       <h1 className="text-3xl font-bold mb-6 text-center">
-        Mentor-Mentee Matching
+        True Match System
       </h1>
 
-      <div className="mb-4 text-center text-gray-500">
-        Matching simulation powered by <strong>Campus Matrix</strong> ⚡
+      <div className="mb-6 flex justify-center space-x-4">
+        {user?.roles?.includes("mentee") && (
+           <button 
+              className={`px-4 py-2 rounded-lg font-medium transition cursor-pointer ${activeTab === 'mentor' ? 'bg-indigo-600 text-white shadow-md' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+              onClick={() => handleTabSwitch('mentor')}
+           >
+              Find a Mentor
+           </button>
+        )}
+        {user?.roles?.includes("mentor") && (
+           <button 
+              className={`px-4 py-2 rounded-lg font-medium transition cursor-pointer ${activeTab === 'mentee' ? 'bg-indigo-600 text-white shadow-md' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+              onClick={() => handleTabSwitch('mentee')}
+           >
+              Find a Mentee
+           </button>
+        )}
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
-        {user?.role === "mentee"
-          ? dummyMentors.map((mentor) => (
+      {loading ? (
+        <div className="flex flex-col items-center justify-center min-h-[40vh]">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-indigo-600 border-solid mb-4"></div>
+          <p className="text-xl font-medium text-gray-600">Calculating Compatibility...</p>
+        </div>
+      ) : matches.length === 0 ? (
+        <div className="text-center text-gray-500 mt-10">
+          No matches found right now. Check back later or complete more fields in your profile!
+        </div>
+      ) : (
+        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+          {matches.map((matchData) => {
+             const m = matchData.profile;
+             const targetUser = m.user;
+             return (
               <div
-                key={mentor.id}
-                className="bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition"
+                key={m._id}
+                className="bg-white p-4 rounded-xl shadow-md border hover:shadow-xl transition transform hover:-translate-y-1"
               >
                 <img
-                  src={mentor.image}
-                  alt={mentor.name}
-                  className="w-20 h-20 mx-auto rounded-full mb-4 object-cover"
+                  src={targetUser?.image || "/avatar.png"}
+                  alt={targetUser?.name}
+                  className="w-20 h-20 mx-auto rounded-full mb-4 object-cover border-2 border-indigo-100"
                 />
-                <h2 className="text-xl font-semibold text-center">{mentor.name}</h2>
-                <p className="text-center text-gray-600">{mentor.year}</p>
-                <p className="text-center text-blue-600 font-medium">
-                  {mentor.expertise}
-                </p>
+                <h2 className="text-xl font-semibold text-center text-gray-800">{targetUser?.name}</h2>
+                <p className="text-center text-gray-500 text-sm mb-2">{m.department}</p>
+
+                <div className="bg-indigo-50 text-indigo-700 text-xs font-bold text-center py-1 rounded mb-3">
+                  Match Score: {matchData.score}
+                </div>
+
+                <div className="mb-3 text-center">
+                   <p className="text-xs text-gray-400 font-semibold mb-1">SKILLS</p>
+                   <div className="flex flex-wrap justify-center gap-1">
+                     {m.skills.slice(0, 3).map((s, i) => (
+                        <span key={i} className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs">{s}</span>
+                     ))}
+                     {m.skills.length > 3 && <span className="text-gray-400 text-xs px-1">+{m.skills.length - 3}</span>}
+                   </div>
+                </div>
+
                 <button
-                  className="cursor-pointer mt-4 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600"
-                  onClick={() => toast.success("Mentor request sent!")}
+                  className="mt-4 w-full bg-indigo-600 text-white py-2 rounded-lg font-medium hover:bg-indigo-700 transition cursor-pointer"
+                  onClick={() => requestConnection(targetUser._id)}
                 >
-                  Request Mentor
+                  Send Request
                 </button>
               </div>
-            ))
-          : dummyMentees.map((mentee) => (
-              <div
-                key={mentee.id}
-                className="bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition"
-              >
-                <img
-                  src={mentee.image}
-                  alt={mentee.name}
-                  className="w-20 h-20 mx-auto rounded-full mb-4 object-cover"
-                />
-                <h2 className="text-xl font-semibold text-center">{mentee.name}</h2>
-                <p className="text-center text-gray-600">{mentee.branch}</p>
-                <p className="text-center text-purple-600 font-medium">
-                  {mentee.interests}
-                </p>
-                <button
-                  className="mt-4 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-                  onClick={() => toast.info("Profile viewed")}
-                >
-                  View Profile
-                </button>
-              </div>
-            ))}
-      </div>
+            )
+          })}
+        </div>
+      )}
     </div>
   );
 };
