@@ -1,52 +1,96 @@
 import React from "react";
-
-const resources = [
-  {
-    title: "Programming Resources",
-    desc: "Free online platforms to learn coding: LeetCode, GeeksforGeeks, HackerRank, Codeforces, FreeCodeCamp.",
-    link: "https://www.geeksforgeeks.org/",
-  },
-  {
-    title: "College Notes",
-    desc: "Semester-wise notes for CSE, ECE, ME, IT. Download PDFs and handwritten notes.",
-    link: "#",
-  },
-  {
-    title: "Previous Year Question Papers (PYQ)",
-    desc: "Access PYQs for all branches and years. Useful for exam preparation.",
-    link: "#",
-  },
-  {
-    title: "Campus Guide",
-    desc: "FAQs, campus map, hostel info, and tips for new students.",
-    link: "#",
-  },
-  {
-    title: "Career Resources",
-    desc: "Resume templates, interview tips, LinkedIn profile guides.",
-    link: "#",
-  },
-];
+import { motion } from "framer-motion";
+import { BookOpen, Download, ExternalLink, FileText, Code2, Map, Briefcase, ChevronRight } from "lucide-react";
 
 export default function Resources() {
+  const resources = [
+    {
+      title: "Programming Resources",
+      desc: "Free online platforms to learn coding: LeetCode, GeeksforGeeks, HackerRank, Codeforces, FreeCodeCamp.",
+      link: "https://www.geeksforgeeks.org/",
+      icon: <Code2 size={24} className="text-indigo-500" />,
+      color: "bg-indigo-50 border-indigo-100",
+      action: "Visit Platform"
+    },
+    {
+      title: "College Notes",
+      desc: "Semester-wise notes for CSE, ECE, ME, IT. Download PDFs and handwritten notes.",
+      link: "#",
+      icon: <FileText size={24} className="text-emerald-500" />,
+      color: "bg-emerald-50 border-emerald-100",
+      action: "Download Zip"
+    },
+    {
+      title: "Previous Year Papers (PYQ)",
+      desc: "Access structured Previous Year Questions for all branches and years. Crucial for exam prep.",
+      link: "#",
+      icon: <Download size={24} className="text-amber-500" />,
+      color: "bg-amber-50 border-amber-100",
+      action: "Access Drive"
+    },
+    {
+      title: "Campus Guide & Maps",
+      desc: "FAQs, detailed campus maps, hostel info, and essential tips for new 1st year students.",
+      link: "#",
+      icon: <Map size={24} className="text-rose-500" />,
+      color: "bg-rose-50 border-rose-100",
+      action: "View Guide"
+    },
+    {
+      title: "Career & Placements",
+      desc: "Verified Resume templates, automated interview tips, and LinkedIn profile building guides.",
+      link: "#",
+      icon: <Briefcase size={24} className="text-blue-500" />,
+      color: "bg-blue-50 border-blue-100",
+      action: "Explore Tools"
+    },
+  ];
+
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6 text-blue-700">📚 Student Resources</h1>
-      <div className="grid gap-6 md:grid-cols-2">
-        {resources.map((res, idx) => (
-          <div key={idx} className="bg-white shadow rounded-lg p-5 hover:shadow-lg transition">
-            <h2 className="text-xl font-semibold mb-2 text-indigo-600">{res.title}</h2>
-            <p className="text-gray-700 mb-3">{res.desc}</p>
-            <a
-              href={res.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 hover:underline"
-            >
-              {res.link !== "#" ? "Visit Resource" : "Download"}
-            </a>
-          </div>
-        ))}
+    <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6">
+      <div className="max-w-5xl mx-auto space-y-12">
+        
+        {/* Header */}
+        <div className="text-center">
+           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring" }} className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-lg mb-6">
+              <BookOpen size={32} className="text-white" />
+           </motion.div>
+           <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">Student Knowledge Base</h1>
+           <p className="text-slate-500 mt-3 max-w-lg mx-auto leading-relaxed">Everything you need to excel at SATI Vidisha. From previous year exam question banks to highly rated technical setups.</p>
+        </div>
+
+        {/* Resources Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+           {resources.map((res, idx) => (
+              <motion.div 
+                 key={idx}
+                 initial={{ opacity: 0, y: 15 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 transition={{ delay: idx * 0.05 }}
+                 className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-all group cursor-pointer flex flex-col"
+              >
+                 <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 border ${res.color} group-hover:scale-110 transition-transform`}>
+                    {res.icon}
+                 </div>
+                 
+                 <h2 className="text-xl font-bold text-slate-800 mb-2">{res.title}</h2>
+                 <p className="text-slate-500 text-sm leading-relaxed flex-1 mb-6">{res.desc}</p>
+                 
+                 <div className="pt-4 border-t border-slate-100 mt-auto">
+                    <a
+                      href={res.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-600 group-hover:text-indigo-600 transition-colors"
+                    >
+                      {res.action} 
+                      {res.link !== "#" ? <ExternalLink size={14} /> : <ChevronRight size={16} />}
+                    </a>
+                 </div>
+              </motion.div>
+           ))}
+        </div>
+
       </div>
     </div>
   );

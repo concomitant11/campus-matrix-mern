@@ -1,5 +1,6 @@
 import Profile from "../models/Profile.js";
 import User from "../models/User.js";
+import { aggregateStats } from "../utils/statAggregator.js";
 
 export const createProfile = async (req, res) => {
   try {
@@ -42,4 +43,37 @@ export const getMyProfile = async (req, res) => {
     console.error(err);
     res.status(500).json({ message: "Server error" });
   }
+};
+
+export const refreshStats = async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+    if (!profile) return res.status(404).json({ message: "Profile missing" });
+
+    const stats = await aggregateStats(profile);
+    
+    profile.totalDynamicScore = stats.totalScore;
+    profile.combinedStreak = stats.combinedStreak;
+    profile.contributionGraph = stats.contributionGraph;
+    
+    await profile.save();
+    res.status(200).json({ message: "Stats updated successfully", profile, stats });
+  } catch(err) {
+    console.error(err);
+    res.status(500).json({ message: "Error aggregating external platforms" });
+  }
+};
+
+export const updateExternalHandles = async (req, res) => {
+   try {
+      const { githubUsername, leetcodeUsername, gfgUsername } = req.body;
+      const profile = await Profile.findOneAndUpdate(
+         { user: req.user.id },
+         { githubUsername, leetcodeUsername, gfgUsername },
+         { new: true }
+      );
+      res.json(profile);
+   } catch(err) {
+      res.status(500).json({ message: "Failed to update handles" });
+   }
 };

@@ -1,115 +1,161 @@
 import React from "react";
-
-const events = [
-  {
-    title: "🚀 What is the FLUXWave?",
-    details: (
-      <>
-        <p>
-          FLUXWave is an online hackathon with 3 thrilling rounds, where coders solve challenges from anywhere.
-        </p>
-        <p className="mt-2">
-          <strong>🧠 Domains:</strong> Real-world software problems — Web, Mobile, Tools, and more. Open Innovation — build in any area you're passionate about.
-        </p>
-        <p className="mt-2">
-          <strong>💬 Major Problem Statement:</strong> Healthcare, Agriculture, Local Vendors, Education, Startup & Entrepreneurship, Women Safety, Cybersecurity, Environment.
-        </p>
-        <ul className="mt-2 list-disc list-inside text-gray-700">
-          <li>
-            <strong>Round 0 — Team Formation:</strong> Form a team of 3–4 members from any year, Submit idea name.<br />
-            <span className="text-gray-500">📅 Last Date: 8 July, 11:59 PM</span>
-          </li>
-          <li>
-            <strong>Round 1 — PPT Submission:</strong> Submit a PPT explaining your idea and approach.<br />
-            <span className="text-gray-500">📅 Last Date: 12 July, 11:59 PM</span>
-          </li>
-          <li>
-            <strong>Round 2 — Prototype Submission:</strong> Submit your GitHub repo (preferred) or ZIP of the project with a demo video. Deployed project is a bonus.<br />
-            <span className="text-gray-500">📅 Last Date: 24 July, 11:59 PM</span>
-          </li>
-          <li>
-            <strong>Round 3 — Final Interview:</strong> Team interview based on project, clarity, and teamwork.<br />
-            <span className="text-gray-500">📅 Interview Date: 27 July</span>
-          </li>
-        </ul>
-      </>
-    ),
-  },
-  {
-    title: "💻 WordPress Build Tour 💻",
-    details: (
-      <>
-        <p>
-          🚨 Hello Coders, Creators & Curious Minds! 🚨 <br/>
-          🌐 SATI Vidisha proudly brings you the WordPress Build Tour – Campus Edition!<br />
-          An exciting one-day event where creativity meets coding and your ideas go live! 💡💻
-        </p>
-        <ul className="mt-2 list-disc list-inside text-gray-700">
-          <li>🧠 Hands-on Website Development</li>
-          <li>🌍 Intro to Open Source & Community Culture</li>
-          <li>🤝 Connect with WordPress Professionals</li>
-          <li>💻 Live Demos | Real-Time Guidance | Interactive Workshops</li>
-        </ul>
-        <p className="mt-2">
-          <strong>📅 Date:</strong> 26th July 2025<br />
-          <strong>📍 Venue:</strong> VV Natu Computer Centre, SATI Vidisha<br />
-          <strong>🎯 Organized by:</strong> WordPress Bhopal Team x E-Cell SATI SBI<br />
-          <span className="text-red-500">⚠ Limited Seats Available!</span>
-        </p>
-        <p className="mt-2">
-          📌 Register Now:{" "}
-          <a
-            href="https://tinyurl.com/EcellSATIxWordPress"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 underline"
-          >
-            https://tinyurl.com/EcellSATIxWordPress
-          </a>
-        </p>
-        <p className="mt-2">
-          Let’s build something amazing together! 🚀<br />
-          <span className="text-gray-500">#WordPressBuildTour #ECellSATI #TechAtSATI #OpenSourceFuture</span>
-        </p>
-      </>
-    ),
-  },
-];
-
-const dummyEvents = [
-  {
-    title: "Resume Workshop",
-    date: "30 July 2025",
-    desc: "Learn how to build a professional resume and LinkedIn profile.",
-  },
-  {
-    title: "Competitive Coding Bootcamp",
-    date: "5 August 2025",
-    desc: "Sharpen your coding skills with hands-on problems and expert guidance.",
-  },
-];
+import { motion } from "framer-motion";
+import { CalendarDays, MapPin, Clock, ArrowRight, Sparkles, Code, Briefcase } from "lucide-react";
 
 export default function Events() {
+  const primaryEvents = [
+    {
+      title: "FLUXWave Hackathon 2.0",
+      type: "Online Hackathon",
+      icon: <Code size={20} />,
+      gradient: "from-indigo-500 to-purple-600",
+      status: "Active",
+      details: [
+         "Round 0 — Team Formation: Form a team of 3–4 members from any year.",
+         "Round 1 — PPT Submission: Submit a PPT explaining your idea and approach.",
+         "Round 2 — Prototype Submission: Submit your GitHub repo or ZIP with a video.",
+         "Round 3 — Final Interview: Team interview based on project clarity."
+      ],
+      tags: ["Open Innovation", "Healthcare", "Education", "Environment"],
+      dates: "July 8 - July 27, 2025"
+    },
+    {
+      title: "WordPress Build Tour",
+      type: "Workshop & Ideation",
+      icon: <Sparkles size={20} />,
+      gradient: "from-blue-500 to-cyan-500",
+      status: "Upcoming",
+      details: [
+         "Hands-on Website Development & Ideation.",
+         "Intro to Open Source & Community Culture.",
+         "Connect with WordPress Professionals.",
+         "Live Demos | Real-Time Guidance | Interactive Workshops."
+      ],
+      tags: ["WordPress", "Web Dev", "E-Cell SATI"],
+      dates: "July 26, 2025",
+      location: "VV Natu Computer Centre",
+      link: "https://tinyurl.com/EcellSATIxWordPress"
+    }
+  ];
+
+  const upcomingEvents = [
+    {
+      title: "Resume & Portfolio Workshop",
+      date: "30 July 2025",
+      desc: "Learn how to build a professional resume and LinkedIn profile.",
+      icon: <Briefcase size={18} />
+    },
+    {
+      title: "Competitive Coding Bootcamp",
+      date: "5 August 2025",
+      desc: "Sharpen your coding skills with hands-on problems and expert guidance.",
+      icon: <Code size={18} />
+    },
+  ];
+
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6 text-blue-700">🎉 Upcoming Events</h1>
-      <div className="space-y-6 mb-8">
-        {events.map((event, idx) => (
-          <div key={idx} className="bg-white shadow-lg rounded-lg p-6 border-l-4 border-blue-500">
-            <h2 className="text-2xl font-semibold mb-2 text-indigo-700">{event.title}</h2>
-            <div className="text-gray-800 text-base">{event.details}</div>
+    <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6">
+      <div className="max-w-5xl mx-auto space-y-12">
+        
+        {/* Header */}
+        <div className="text-center">
+           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring" }} className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-2xl shadow-lg mb-6">
+              <CalendarDays size={32} className="text-white" />
+           </motion.div>
+           <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">Campus Events</h1>
+           <p className="text-slate-500 mt-3 max-w-lg mx-auto leading-relaxed">Discover hackathons, bootcamps, and networking sessions. Upgrade your skills beyond the classroom.</p>
+        </div>
+
+        {/* Featured Events */}
+        <div className="space-y-6">
+          <h2 className="text-sm font-bold text-slate-400 uppercase tracking-wider pl-2">Featured Highlights</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+             {primaryEvents.map((event, idx) => (
+                <motion.div 
+                   key={idx}
+                   initial={{ opacity: 0, y: 10 }}
+                   animate={{ opacity: 1, y: 0 }}
+                   transition={{ delay: idx * 0.1 }}
+                   className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-shadow group flex flex-col"
+                >
+                   <div className={`h-2 w-full bg-gradient-to-r ${event.gradient}`}></div>
+                   <div className="p-8 flex-1 flex flex-col">
+                      <div className="flex justify-between items-start mb-4">
+                         <div className={`p-2 rounded-xl bg-slate-50 text-slate-600 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors`}>
+                            {event.icon}
+                         </div>
+                         <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${event.status === 'Active' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
+                            {event.status}
+                         </span>
+                      </div>
+                      
+                      <h3 className="text-2xl font-bold text-slate-800 mb-1">{event.title}</h3>
+                      <p className="text-slate-500 text-sm font-medium mb-6">{event.type}</p>
+                      
+                      <ul className="space-y-3 mb-8 flex-1">
+                         {event.details.map((detail, dIdx) => (
+                            <li key={dIdx} className="text-sm text-slate-600 flex items-start gap-2">
+                               <div className="w-1.5 h-1.5 rounded-full bg-slate-300 mt-1.5 shrink-0"></div>
+                               <span className="leading-relaxed">{detail}</span>
+                            </li>
+                         ))}
+                      </ul>
+
+                      <div className="pt-6 border-t border-slate-100 space-y-3">
+                         <div className="flex items-center gap-2 text-sm text-slate-600 font-medium">
+                            <Clock size={16} className="text-slate-400" /> {event.dates}
+                         </div>
+                         {event.location && (
+                            <div className="flex items-center gap-2 text-sm text-slate-600 font-medium">
+                               <MapPin size={16} className="text-slate-400" /> {event.location}
+                            </div>
+                         )}
+                         <div className="flex flex-wrap gap-2 mt-4">
+                            {event.tags.map(tag => (
+                               <span key={tag} className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 bg-slate-50 border border-slate-200 text-slate-500 rounded-md">
+                                  {tag}
+                               </span>
+                            ))}
+                         </div>
+                         {event.link && (
+                            <a href={event.link} target="_blank" rel="noreferrer" className="mt-6 w-full flex items-center justify-center gap-2 bg-slate-900 text-white py-3 rounded-xl hover:bg-slate-800 transition-colors text-sm font-medium">
+                               Register Now <ArrowRight size={16}/>
+                            </a>
+                         )}
+                      </div>
+                   </div>
+                </motion.div>
+             ))}
           </div>
-        ))}
-      </div>
-      <h2 className="text-xl font-bold mb-4 text-gray-700">Other Events</h2>
-      <div className="grid gap-6 md:grid-cols-2">
-        {dummyEvents.map((ev, idx) => (
-          <div key={idx} className="bg-gray-50 shadow rounded-lg p-5 hover:shadow-lg transition">
-            <h3 className="text-lg font-semibold text-blue-600 mb-1">{ev.title}</h3>
-            <p className="text-sm text-gray-500 mb-2">{ev.date}</p>
-            <p className="text-gray-700">{ev.desc}</p>
-          </div>
-        ))}
+        </div>
+
+        {/* Other Upcoming */}
+        <div className="space-y-6 pt-8">
+           <h2 className="text-sm font-bold text-slate-400 uppercase tracking-wider pl-2">Upcoming Schedule</h2>
+           <div className="grid sm:grid-cols-2 gap-4">
+              {upcomingEvents.map((ev, idx) => (
+                 <motion.div 
+                    key={idx}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2 + (idx * 0.1) }}
+                    className="bg-white p-5 rounded-2xl border border-slate-200 flex items-start gap-4 hover:border-slate-300 transition-colors"
+                 >
+                    <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl shrink-0">
+                       {ev.icon}
+                    </div>
+                    <div>
+                       <h4 className="font-bold text-slate-800 mb-1">{ev.title}</h4>
+                       <p className="text-sm text-slate-500 leading-relaxed mb-3">{ev.desc}</p>
+                       <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-400">
+                          <CalendarDays size={14} /> {ev.date}
+                       </div>
+                    </div>
+                 </motion.div>
+              ))}
+           </div>
+        </div>
+
       </div>
     </div>
   );

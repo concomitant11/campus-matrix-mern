@@ -35,10 +35,16 @@ const profileSchema = new mongoose.Schema(
     linkedin: {
       type: String,
     },
+    githubUsername: { type: String },
+    leetcodeUsername: { type: String },
+    gfgUsername: { type: String },
     gamificationPoints: {
       type: Number,
       default: 0,
     },
+    totalDynamicScore: { type: Number, default: 0 },
+    combinedStreak: { type: Number, default: 0 },
+    contributionGraph: { type: Object, default: {} },
     badges: {
       type: [String],
       default: [],

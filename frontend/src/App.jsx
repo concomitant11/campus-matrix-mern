@@ -30,6 +30,7 @@ import Resources from "./pages/Resources"
 import Events from "./pages/Events"
 import Leaderboard from "./pages/Leaderboard"
 import AdminDashboard from "./pages/AdminDashboard"
+import News from "./pages/News"
 
 function App() {
   const [user, setUser] = useState(null);
@@ -91,6 +92,9 @@ function App() {
               </ProtectedRoute>}/>
           <Route path="/leaderboard" element={<ProtectedRoute user={user}>
                 <Leaderboard />
+              </ProtectedRoute>}/>
+          <Route path="/news" element={<ProtectedRoute user={user}>
+                <News />
               </ProtectedRoute>}/>
           <Route path="/admin" element={
               <ProtectedRoute user={user}>

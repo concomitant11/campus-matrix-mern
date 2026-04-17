@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { motion } from "framer-motion";
+import { Trophy, Medal, Flame, Code2, Github } from "lucide-react";
 
 const Leaderboard = () => {
    const [leaders, setLeaders] = useState([]);
@@ -12,56 +14,87 @@ const Leaderboard = () => {
         .finally(() => setLoading(false));
    }, []);
 
-   return (
-      <div className="p-6 max-w-4xl mx-auto">
-         <h1 className="text-3xl font-bold mb-6 text-center text-indigo-700">Campus Leaderboard</h1>
-         <p className="text-center text-gray-500 mb-8">Top students dominating the Gamification Points!</p>
+   const getRankStyle = (index) => {
+      if(index === 0) return "bg-amber-100 text-amber-600 ring-2 ring-amber-300";
+      if(index === 1) return "bg-slate-200 text-slate-600 ring-2 ring-slate-300";
+      if(index === 2) return "bg-orange-100 text-orange-600 ring-2 ring-orange-300";
+      return "bg-slate-50 text-slate-500 font-medium";
+   };
 
-         {loading ? (
-             <div className="flex justify-center mt-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-700"></div>
-             </div>
-         ) : (
-            <div className="bg-white shadow rounded-lg overflow-hidden">
-               <table className="w-full text-left border-collapse">
-                  <thead className="bg-indigo-50 border-b">
-                     <tr>
-                        <th className="p-4 indent-4">Rank</th>
-                        <th className="p-4">Student</th>
-                        <th className="p-4">Badges</th>
-                        <th className="p-4 text-right">Points</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     {leaders.map((profile, index) => (
-                        <tr key={profile._id} className="border-b hover:bg-gray-50 transition">
-                           <td className="p-4 indent-4 font-bold text-gray-600">#{index + 1}</td>
-                           <td className="p-4 flex items-center gap-3">
-                              <img src={profile.user?.image || "/avatar.png"} alt="avatar" className="w-10 h-10 rounded-full border" />
-                              <div>
-                                 <p className="font-semibold text-gray-800">{profile.user?.name}</p>
-                                 <p className="text-xs text-gray-400">{profile.department}</p>
-                              </div>
-                           </td>
-                           <td className="p-4">
-                              <div className="flex flex-wrap gap-1">
-                                 {profile.badges?.map(b => (
-                                    <span key={b} className="bg-yellow-100 text-yellow-700 text-xs px-2 py-1 rounded font-medium border border-yellow-200">
-                                       {b}
-                                    </span>
-                                 ))}
-                                 {profile.badges?.length === 0 && <span className="text-gray-400 text-xs">-</span>}
-                              </div>
-                           </td>
-                           <td className="p-4 text-right font-bold text-indigo-600 text-lg">
-                              {profile.gamificationPoints}
-                           </td>
-                        </tr>
-                     ))}
-                  </tbody>
-               </table>
+   return (
+      <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6">
+         <div className="max-w-4xl mx-auto space-y-8">
+            <div className="text-center mb-12">
+               <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring" }} className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl shadow-lg mb-6">
+                  <Trophy size={32} className="text-white" />
+               </motion.div>
+               <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">Global Leaderboard</h1>
+               <p className="text-slate-500 mt-3 max-w-lg mx-auto">Rankings are calculated dynamically combing internal mentorship Gamification Points with synced GitHub and LeetCode contributions.</p>
             </div>
-         )}
+
+            {loading ? (
+                <div className="flex justify-center mt-20">
+                   <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600"></div>
+                </div>
+            ) : (
+               <div className="bg-white shadow-xl shadow-slate-200/40 rounded-3xl overflow-hidden border border-slate-100">
+                  <div className="hidden sm:grid grid-cols-12 gap-4 p-4 px-6 bg-slate-50/50 border-b border-slate-100 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                     <div className="col-span-1 text-center">Rank</div>
+                     <div className="col-span-5">Engineer</div>
+                     <div className="col-span-3">Links</div>
+                     <div className="col-span-3 text-right">Glob Score</div>
+                  </div>
+                  
+                  <div className="divide-y divide-slate-100">
+                     {leaders.map((profile, index) => (
+                        <motion.div 
+                           initial={{ opacity: 0, y: 10 }}
+                           animate={{ opacity: 1, y: 0 }}
+                           transition={{ delay: index * 0.05 }}
+                           key={profile._id} 
+                           className="grid grid-cols-1 sm:grid-cols-12 gap-4 p-4 px-6 items-center hover:bg-slate-50 transition-colors group"
+                        >
+                           <div className="col-span-1 hidden sm:flex justify-center">
+                              <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${getRankStyle(index)}`}>
+                                 {index + 1}
+                              </span>
+                           </div>
+                           
+                           <div className="col-span-12 sm:col-span-5 flex items-center gap-4">
+                              <div className="relative">
+                                 <img src={profile.user?.image || "/avatar.png"} alt="avatar" className="w-12 h-12 rounded-full border-2 border-white shadow-sm" />
+                                 {profile.combinedStreak > 0 && (
+                                    <div className="absolute -bottom-1 -right-1 bg-amber-500 w-5 h-5 rounded-full border-2 border-white flex items-center justify-center" title={`${profile.combinedStreak} day streak!`}>
+                                       <Flame size={10} className="text-white"/>
+                                    </div>
+                                 )}
+                              </div>
+                              <div className="min-w-0">
+                                 <p className="font-bold text-slate-800 truncate group-hover:text-indigo-600 transition-colors">{profile.user?.name}</p>
+                                 <p className="text-sm text-slate-500 truncate">{profile.department}</p>
+                              </div>
+                           </div>
+                           
+                           <div className="col-span-12 sm:col-span-3 flex items-center gap-3 pl-16 sm:pl-0">
+                              {profile.githubUsername ? <a href={`https://github.com/${profile.githubUsername}`} target="_blank" className="text-slate-400 hover:text-slate-800"><Github size={18}/></a> : <Github size={18} className="text-slate-200"/>}
+                              {profile.leetcodeUsername ? <a href={`https://leetcode.com/${profile.leetcodeUsername}`} target="_blank" className="text-slate-400 hover:text-orange-500"><Code2 size={18}/></a> : <Code2 size={18} className="text-slate-200"/>}
+                           </div>
+                           
+                           <div className="col-span-12 sm:col-span-3 flex sm:justify-end items-center pl-16 sm:pl-0">
+                              <div className="bg-indigo-50 text-indigo-700 px-4 py-1.5 rounded-full font-extrabold shadow-sm border border-indigo-100 flex items-center gap-1.5">
+                                 {index < 3 && <Medal size={14}/>}
+                                 {profile.totalDynamicScore} <span className="text-xs font-medium text-indigo-400">pts</span>
+                              </div>
+                           </div>
+                        </motion.div>
+                     ))}
+                     {leaders.length === 0 && (
+                        <div className="p-12 text-center text-slate-500">No users ranked yet. Refreshing profiles may take a moment.</div>
+                     )}
+                  </div>
+               </div>
+            )}
+         </div>
       </div>
    );
 };

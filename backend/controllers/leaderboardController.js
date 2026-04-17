@@ -4,7 +4,7 @@ export const getLeaderboard = async (req, res) => {
   try {
     const topProfiles = await Profile.find()
       .populate("user", "name email image roles")
-      .sort({ gamificationPoints: -1 })
+      .sort({ totalDynamicScore: -1 })
       .limit(20);
     
     // Optional: could parse github/leetcode URLs from profile here if they were added.

@@ -12,6 +12,10 @@ export const signup = async (req, res) => {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
+    if (!adminSecret && !email.endsWith("@satiengg.in")) {
+      return res.status(403).json({ message: "Only @satiengg.in college emails are permitted." });
+    }
+
     // Validate role based on year
     const yearNum = parseInt(year);
     if (yearNum === 1 && (roles.includes('mentor') || !roles.includes('mentee'))) {

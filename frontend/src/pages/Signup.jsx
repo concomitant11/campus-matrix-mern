@@ -126,15 +126,20 @@ const Signup = () => {
                onChange={handleChange}
                className="w-full px-4 py-3 bg-white/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
              />
-             <input
-               type="email"
-               name="email"
-               placeholder="College Email"
-               required
-               value={formData.email}
-               onChange={handleChange}
-               className="w-full px-4 py-3 bg-white/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-             />
+             <div className="relative">
+               <input
+                 type="email"
+                 name="email"
+                 placeholder="College Email (@satiengg.in)"
+                 required
+                 value={formData.email}
+                 onChange={handleChange}
+                 className="w-full px-4 py-3 bg-white/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+               />
+               {formData.email && !formData.email.endsWith("@satiengg.in") && !formData.adminSecret && (
+                  <p className="text-xs text-red-500 mt-1 ml-1 absolute -bottom-5">Must use @satiengg.in domain</p>
+               )}
+             </div>
              <input
                type="password"
                name="password"
