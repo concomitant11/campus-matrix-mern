@@ -81,17 +81,17 @@ function App() {
           <Route path="/auth/signup" element={<Signup setUser={setUser} />} />
           <Route path="/me" element={<Home />} />
 
-          <Route path="/resources" element={<ProtectedRoute>
+          <Route path="/resources" element={<ProtectedRoute user={user}>
                 <Resources />
               </ProtectedRoute>}/>
-          <Route path="/events" element={<ProtectedRoute>
+          <Route path="/events" element={<ProtectedRoute user={user}>
                 <Events />
               </ProtectedRoute>}/>
 
           <Route
             path="/create-profile"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute user={user}>
                 <CreateProfile />
               </ProtectedRoute>
             }
@@ -99,7 +99,7 @@ function App() {
           <Route
             path="/profile"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute user={user}>
                 <Profile />
               </ProtectedRoute>
             }
@@ -107,7 +107,7 @@ function App() {
           <Route
             path="/matching"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute user={user}>
                 <Matching />
               </ProtectedRoute>
             }
@@ -116,7 +116,7 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute user={user}>
                 <Dashboard />
               </ProtectedRoute>
             }
@@ -124,7 +124,7 @@ function App() {
           <Route
             path="/goals"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute user={user}>
                 <Goals />
               </ProtectedRoute>
             }
@@ -133,7 +133,7 @@ function App() {
           <Route
             path="/messages"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute user={user}>
                 <Messages />
               </ProtectedRoute>
             }

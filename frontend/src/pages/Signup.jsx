@@ -31,6 +31,7 @@ const Signup = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setError("");
 
     // Auto-select role based on year
     if (name === "year") {

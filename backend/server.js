@@ -54,10 +54,7 @@ app.get(/^\/(?!api).*/, (req, res) => {
 
 // MongoDB connection
 mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
@@ -92,10 +89,8 @@ io.on("connection", (socket) => {
     const chat = message.chat;
     if (!chat || !chat.users) return;
 
-    chat.users.forEach((user) => {
-      if (user._id === message.sender._id) return;
-      socket.to(chat._id).emit("newMessage", message);
-    });
+    // Emit exactly once to the entire room. The sender won't receive it by default.
+    socket.to(chat._id).emit("newMessage", message);
   });
 
   socket.on("typing", (chatId) => {

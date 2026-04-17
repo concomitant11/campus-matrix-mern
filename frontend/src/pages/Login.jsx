@@ -55,7 +55,10 @@ export default function Login({ setUser }) {
           type="email"
           name="email"
           value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
+          onChange={(e) => {
+            setForm({ ...form, email: e.target.value });
+            setError("");
+          }}
           placeholder="Email address"
           className="w-full p-3 border rounded mb-3"
           required
@@ -64,7 +67,10 @@ export default function Login({ setUser }) {
           type="password"
           name="password"
           value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
+          onChange={(e) => {
+            setForm({ ...form, password: e.target.value });
+            setError("");
+          }}
           placeholder="Password"
           className="w-full p-3 border rounded mb-4"
           required
