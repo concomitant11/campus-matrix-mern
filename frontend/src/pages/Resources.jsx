@@ -23,10 +23,10 @@ export default function Resources() {
     {
       title: "Previous Year Papers (PYQ)",
       desc: "Access structured Previous Year Questions for all branches and years. Crucial for exam prep.",
-      link: "#",
+      link: "https://saticollege.online/",
       icon: <Download size={24} className="text-amber-500" />,
       color: "bg-amber-50 border-amber-100",
-      action: "Access Drive"
+      action: "Access PYQs"
     },
     {
       title: "Campus Guide & Maps",

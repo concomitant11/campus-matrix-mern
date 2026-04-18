@@ -14,7 +14,7 @@ const News = () => {
                <p className="text-slate-500 mt-3 max-w-lg mx-auto leading-relaxed">Stay updated with the latest announcements, results, and campus flashes directly sourced from SATI Vidisha official socials.</p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-1 gap-8">
                
                {/* Instagram Box */}
                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
@@ -32,7 +32,7 @@ const News = () => {
                         Connecting to Instagram...
                      </span>
                      <iframe 
-                        src="https://www.instagram.com/sati_vidisha/embed" 
+                        src="https://www.instagram.com/satiengg.in/embed" 
                         width="100%" 
                         height="100%" 
                         frameBorder="0" 
@@ -40,29 +40,6 @@ const News = () => {
                         allowtransparency="true"
                         className="relative z-10 w-full h-full"
                         title="SATI Vidisha Instagram"
-                     ></iframe>
-                  </div>
-               </motion.div>
-
-               {/* Facebook Plugin Box */}
-               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
-                  <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2 mb-6">
-                     <div className="bg-blue-100 p-2 rounded-lg text-blue-600"><Facebook size={20}/></div>
-                     Facebook Timeline
-                  </h2>
-                  <div className="bg-slate-50 rounded-2xl overflow-hidden border border-slate-100 h-[600px] flex items-center justify-center w-full relative">
-                     <span className="absolute z-0 text-slate-400 font-medium">Resolving Facebook Graph...</span>
-                     <iframe 
-                        src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FSATI.Vidisha.Official&tabs=timeline&width=500&height=600&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" 
-                        width="100%" 
-                        height="100%" 
-                        style={{ border: 'none', overflow: 'hidden' }} 
-                        scrolling="yes" 
-                        frameBorder="0" 
-                        allowFullScreen="true" 
-                        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                        className="relative z-10 mx-auto"
-                        title="SATI Facebook timeline"
                      ></iframe>
                   </div>
                </motion.div>
