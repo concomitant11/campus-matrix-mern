@@ -64,7 +64,7 @@ export default function Navbar({ user, setUser }) {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
             <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-xl group-hover:bg-indigo-700 transition-colors shadow-sm">
-              M
+              <img src="favicon.png" alt="logo" />
             </div>
             <span className="text-xl font-bold text-slate-800 tracking-tight">Campus Matrix</span>
           </Link>
